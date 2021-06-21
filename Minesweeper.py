@@ -101,8 +101,17 @@ def main():
 
                         print(f"{clicked_x},{clicked_y}")
 
+                        if grid[f"{clicked_x},{clicked_y}"][3]:
+
+                            print("Unflag")
+
+                            grid = flag(grid, columns, rows, clicked_x, clicked_y)
+
+                            print(grid[f"{clicked_x},{clicked_y}"])
+
+
                         # Check to see if it is covered
-                        if grid[f"{clicked_x},{clicked_y}"][2]:
+                        elif grid[f"{clicked_x},{clicked_y}"][2]:
 
                             print("Uncover")
 
@@ -127,7 +136,9 @@ def main():
 
                             print("Flag")
 
-                            flag(grid, columns, rows, clicked_x, clicked_y)
+                            grid = flag(grid, columns, rows, clicked_x, clicked_y)
+
+                            print(grid[f"{clicked_x},{clicked_y}"])
 
                             
 
@@ -264,11 +275,17 @@ def flag(grid, columns, rows, x, y):
 
     """Flag a mine"""
 
-    if grid[f"{x},{y}"][2] == True:
+    if grid[f"{x},{y}"][3] == True:
+        
+        grid[f"{x},{y}"][3] = False
 
-        if grid[f"{x},{y}"][3] == True: grid[f"{x},{y}"][3] = False
+    elif grid[f"{x},{y}"][3] == False:
+        
+        grid[f"{x},{y}"][3] = True
 
-        elif grid[f"{x},{y}"][3] == False: grid[f"{x},{y}"][3] = True
+    return grid
+
+        
 
         
         
@@ -342,5 +359,3 @@ def drawScreen(window, window_width, window_height,
 if __name__ == "__main__":
 
     main()
-
-
