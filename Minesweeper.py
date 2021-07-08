@@ -217,6 +217,22 @@ def createMinefield(grid, columns, rows, mine_count, clicked_x, clicked_y):
             (random_x, random_y) != (clicked_x, clicked_y)
             and grid[f"{random_x},{random_y}"][0] != True
             ):
+            
+            # Check that a mine isn't being generated in proximity of where the user clicked
+            # in_proximity being a flag as to if it has been placed in proximity
+            in_proximity = False
+            for rotation in range(8):
+                
+                if (
+                    (random_x + rotation_list[rotation][0],
+                    random_y +rotation_list[rotation][1]) ==
+                    (clicked_x, clicked_y)
+                    ):
+
+                    in_proximity = True
+            
+            if in_proximity: continue
+
 
             grid[f"{random_x},{random_y}"][0] = True
 
