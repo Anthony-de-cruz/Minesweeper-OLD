@@ -34,6 +34,10 @@ To Do:
         Add an actual flag sprite,
         Create animations for flagging and uncovering,
         Create different colour themes
+    
+    Function improvement:
+    
+        Figure out how to lower function parameters and organisation, 12 parameters for drawScreen() ain't good
 
 Done:
 
