@@ -22,7 +22,6 @@ To Do:
     Mine generation overhaul:
     
         Balance an actually good number of mines,
-        Ensure a playable area upon start,
         Make sure mines spawn in completable formations (such as 9 mines in a 3x3 space)
         
     Difficulties:
@@ -41,7 +40,7 @@ To Do:
 
 Done:
 
-
+    Ensured playable area upon mine generation
     Created main application setup,
     Created inputs/outputs,
     Created graphics,
