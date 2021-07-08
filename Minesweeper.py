@@ -308,11 +308,6 @@ def drawScreen(window, window_width, window_height,
 	(colours["Black"]),
 	(0, 0, window_width, topbar_thickness))
 
-    pygame.draw.rect(window,
-    (colours["Green"]),
-    (200,200, 40,40))
-    
-
     for x in range(columns):
         for y in range(rows):
 
@@ -323,7 +318,7 @@ def drawScreen(window, window_width, window_height,
                 (colours["Green"]),
                 (x * tile_width, y * tile_height + topbar_thickness , tile_width, tile_height))
 
-                
+
                 # If flagged, draw as so
                 if grid[f"{x},{y}"][3] == True:
 
