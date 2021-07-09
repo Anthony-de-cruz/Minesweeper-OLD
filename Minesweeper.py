@@ -30,7 +30,7 @@ def main():
     window_height += topbar_thickness
 
     # Number of mines
-    mine_count = 30
+    mine_count = 50
     flag_count = mine_count
 
     # Mines are generated once you have clicked the first tile as to
@@ -44,6 +44,12 @@ def main():
         "Grey":  (60,60,60),
         "Green": (0,150,0),
     }
+
+    # Load flag icon and scaled to 80% of a tile
+    flag_icon = pygame.transform.smoothscale(
+        pygame.image.load(os.path.join(os.path.dirname(__file__), 'assets','flag.png')),
+        (int(tile_width  * 0.7), int(tile_height * 0.7))
+        )
 
     ## Fonts
     # Font Syntax: font name, size, bold, italic
@@ -158,7 +164,8 @@ def main():
                    topbar_thickness,
                    colours,
                    grid, columns, rows,
-                   proximity_font, proximity_font_dimentions)
+                   proximity_font, proximity_font_dimentions,
+                   flag_icon)
 
         
        
@@ -312,7 +319,8 @@ def drawScreen(window, window_width, window_height,
                topbar_thickness,
                colours,
                grid, columns, rows,
-               proximity_font, proximity_font_dimentions):
+               proximity_font, proximity_font_dimentions,
+               flag_icon):
 
     """Draw the screen"""
 
@@ -328,19 +336,28 @@ def drawScreen(window, window_width, window_height,
         for y in range(rows):
 
             # If covered, draw as so
-            if grid[f"{x},{y}"][2] == True:
+            if grid[f"{x},{y}"][2] == True and grid[f"{x},{y}"][3] != True:
 
                 pygame.draw.rect(window,
                 (colours["Green"]),
-                (x * tile_width, y * tile_height + topbar_thickness , tile_width, tile_height))
+                (x * tile_width, y * tile_height + topbar_thickness, tile_width, tile_height))
 
 
-                # If flagged, draw as so
-                if grid[f"{x},{y}"][3] == True:
+            # If flagged, draw as so
+            elif grid[f"{x},{y}"][3] == True:
 
-                    pygame.draw.rect(window,
-                    (colours["Grey"]),
-                    (x * tile_width, y * tile_height + topbar_thickness , tile_width - 5, tile_height - 5))
+                pygame.draw.rect(window,
+                (colours["Grey"]),
+                (x * tile_width + int(tile_width * 0.1),
+                 y * tile_height + topbar_thickness + int(tile_height * 0.1),
+                 tile_width - int(tile_width * 0.2),
+                 tile_height - int(tile_height * 0.2)))
+
+                window.blit(flag_icon,
+                (x * tile_width + int(tile_width * 0.15), 
+                y * tile_height + topbar_thickness + int(tile_height * 0.15), 
+                tile_width, 
+                tile_height))
                     
             
             # If not covered and not a mine, draw as so
@@ -352,7 +369,8 @@ def drawScreen(window, window_width, window_height,
                 #proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4 for the height centering
                 window.blit(text,
                 (x * tile_width + tile_width / 2 - int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2),
-                 y * tile_height + tile_width / 2 + topbar_thickness / 2 + int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
+                 y * tile_height + tile_width / 2 + topbar_thickness / 2 + 
+                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
 
             # If not covered and is a mine, draw as so
             elif grid[f"{x},{y}"][2] == False and grid[f"{x},{y}"][0] == True:
@@ -363,7 +381,8 @@ def drawScreen(window, window_width, window_height,
                 #proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4 for the height centering
                 window.blit(text,
                 (x * tile_width + tile_width / 2 - int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2),
-                 y * tile_height + tile_width / 2 + topbar_thickness / 2 + int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
+                 y * tile_height + tile_width / 2 + topbar_thickness / 2 + 
+                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
 
 
 
