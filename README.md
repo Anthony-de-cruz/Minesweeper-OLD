@@ -29,17 +29,17 @@ To Do:
         Mine densities ect
         
     Graphics overhaul:
-        
-        Add an actual flag sprite,
+
         Create animations for flagging and uncovering,
         Create different colour themes
     
     Function improvement:
     
-        Figure out how to lower function parameters and organisation, 12 parameters for drawScreen() ain't good
+        Figure out how to lower function parameters and organisation, 13 parameters for drawScreen() ain't good
 
 Done:
-
+        
+    Added an actual flag sprite,
     Ensured playable area upon mine generation
     Created main application setup,
     Created inputs/outputs,
