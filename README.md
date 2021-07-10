@@ -1,7 +1,8 @@
-﻿Minesweeper
+Minesweeper
 
 To Do:
 
+Fleshed out Flagging system:
 
     Fleshed out Flagging system:
     
