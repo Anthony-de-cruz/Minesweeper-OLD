@@ -1,8 +1,8 @@
-import pygame
 import os
-import sys
 import random
+import sys
 
+import pygame
 
 
 def main():
@@ -29,6 +29,7 @@ def main():
     topbar_thickness = int(window_height / 20)
     window_height += topbar_thickness
 
+    ## Mines
     # Number of mines
     mine_count = 50
     flag_count = mine_count
@@ -36,6 +37,17 @@ def main():
     # Mines are generated once you have clicked the first tile as to
     # avoid clicking on a mine first time
     initial_uncover = False
+
+    ## Timer
+    # timer_started currently serves no purpose but will be used once there will
+    # be anything but the game such as end game screen or difficulty/size selection
+    timer_active = False
+    # This will be to offset get_ticks() as it goes from the init()
+    start_time = 0
+    # This is the current time counter
+    current_time = 0
+
+
 
     ## Colours dictionary
     colours = {
@@ -45,6 +57,7 @@ def main():
         "Green": (0,150,0),
     }
 
+    ## Images
     # Load flag icon and scaled to 80% of a tile
     flag_icon = pygame.transform.smoothscale(
         pygame.image.load(os.path.join(os.path.dirname(__file__), 'assets','flag.png')),
@@ -57,6 +70,8 @@ def main():
     #//text = proximity_font.render("Hellooooooo", True, colours["White"])
     proximity_font = pygame.font.SysFont("Verdana", int(tile_height / 2), False, False)
     proximity_font_dimentions = {}
+
+    timer_font = pygame.font.SysFont("Verdana", int(tile_height / 2), False, False)
     
     for number in range(8):
         proximity_font_dimentions[str(number)] = proximity_font.size(str(number))
@@ -99,6 +114,8 @@ def main():
                     if initial_uncover == False:
 
                         createMinefield(grid, columns, rows, mine_count, clicked_x, clicked_y)
+
+                        timer_active, start_time = toggleTimer(timer_active)
 
                         initial_uncover = True
 
@@ -147,15 +164,18 @@ def main():
                             print(grid[f"{clicked_x},{clicked_y}"])
 
                             
-
-                        
-                    
                 print(mouse_position, event.button,"\n")
 
             # Quit
-            if event.type == pygame.QUIT:
+            elif event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+
+        # Time counter
+        if timer_active:
+
+            current_time = pygame.time.get_ticks() - start_time
 
 
         drawScreen(window,
@@ -165,6 +185,7 @@ def main():
                    colours,
                    grid, columns, rows,
                    proximity_font, proximity_font_dimentions,
+                   timer_font, current_time,
                    flag_icon)
 
         
@@ -184,7 +205,6 @@ def setupWindow(window_width, window_height, topbar_thickness):
     window = pygame.display.set_mode((window_width, window_height))
 
     return window
-
 
 
 def createGrid(columns, rows):
@@ -292,7 +312,15 @@ def uncover(grid, columns, rows, x, y):
                         x + rotation_list[rotation][0],
                         y + rotation_list[rotation][1])
 
-                pass
+def toggleTimer(timer_active):
+
+    """Toggle the timer and set start_time"""
+
+    start_time = pygame.time.get_ticks()
+    timer_active = not timer_active
+
+    return timer_active, start_time
+
 
 def flag(grid, columns, rows, x, y):
 
@@ -320,6 +348,7 @@ def drawScreen(window, window_width, window_height,
                colours,
                grid, columns, rows,
                proximity_font, proximity_font_dimentions,
+               timer_font, current_time,
                flag_icon):
 
     """Draw the screen"""
@@ -332,6 +361,11 @@ def drawScreen(window, window_width, window_height,
 	(colours["Black"]),
 	(0, 0, window_width, topbar_thickness))
 
+    timer_font_render = timer_font.render(str(current_time // 1000), True, colours["White"])
+
+    window.blit(timer_font_render, (400 ,topbar_thickness / 4))
+
+    # Draw grid
     for x in range(columns):
         for y in range(rows):
 
@@ -363,11 +397,11 @@ def drawScreen(window, window_width, window_height,
             # If not covered and not a mine, draw as so
             elif grid[f"{x},{y}"][2] == False and grid[f"{x},{y}"][0] == False:
 
-                text = proximity_font.render(str(grid[f"{x},{y}"][1]), True, colours["White"])
+                proximity_font_render = proximity_font.render(str(grid[f"{x},{y}"][1]), True, colours["White"])
                 
                 #proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2 for the width centering
                 #proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4 for the height centering
-                window.blit(text,
+                window.blit(proximity_font_render,
                 (x * tile_width + tile_width / 2 - int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2),
                  y * tile_height + tile_width / 2 + topbar_thickness / 2 + 
                  int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
@@ -375,11 +409,11 @@ def drawScreen(window, window_width, window_height,
             # If not covered and is a mine, draw as so
             elif grid[f"{x},{y}"][2] == False and grid[f"{x},{y}"][0] == True:
 
-                text = proximity_font.render(("B"), True, colours["White"])
+                proximity_font_render = proximity_font.render(("B"), True, colours["White"])
                 
                 #proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2 for the width centering
                 #proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4 for the height centering
-                window.blit(text,
+                window.blit(proximity_font_render,
                 (x * tile_width + tile_width / 2 - int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2),
                  y * tile_height + tile_width / 2 + topbar_thickness / 2 + 
                  int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
