@@ -404,7 +404,7 @@ def drawScreen(window, window_width, window_height,
                 window.blit(proximity_font_render,
                 (x * tile_width + tile_width / 2 - int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2),
                  y * tile_height + tile_width / 2 + topbar_thickness / 2 + 
-                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
+                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 2)))
 
             # If not covered and is a mine, draw as so
             elif grid[f"{x},{y}"][2] == False and grid[f"{x},{y}"][0] == True:
@@ -416,7 +416,7 @@ def drawScreen(window, window_width, window_height,
                 window.blit(proximity_font_render,
                 (x * tile_width + tile_width / 2 - int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2),
                  y * tile_height + tile_width / 2 + topbar_thickness / 2 + 
-                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
+                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 2)))
 
 
 
