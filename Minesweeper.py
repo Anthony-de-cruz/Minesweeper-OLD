@@ -30,7 +30,7 @@ def main():
     window_height += topbar_thickness
 
     ## Mines
-    # Number of mines
+    # Number of mines and flags
     mine_count = 50
     flag_count = mine_count
 
@@ -131,7 +131,7 @@ def main():
 
                             print("Unflag")
 
-                            grid = flag(grid, columns, rows, clicked_x, clicked_y)
+                            grid, flag_count = flag(grid, clicked_x, clicked_y, flag_count)
 
                             print(grid[f"{clicked_x},{clicked_y}"])
 
@@ -400,7 +400,7 @@ def drawScreen(window, window_width, window_height,
                     
             
             # If not covered and not a mine, draw as so
-            elif grid[f"{x},{y}"][2] == False and grid[f"{x},{y}"][0] == False:
+            elif grid[f"{x},{y}"][2] == False and grid[f"{x},{y}"][0] == False and grid[f"{x},{y}"][1] != 0:
 
                 proximity_font_render = proximity_font.render(str(grid[f"{x},{y}"][1]), True, colours["White"])
                 
