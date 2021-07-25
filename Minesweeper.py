@@ -30,7 +30,7 @@ def main():
     window_height += topbar_thickness
 
     ## Mines
-    # Number of mines
+    # Number of mines and flags
     mine_count = 50
     flag_count = mine_count
 
@@ -54,15 +54,16 @@ def main():
         "Black": (20,20,20),
         "White": (255,255,255),
         "Grey":  (60,60,60),
-        "Green": (0,150,0),
+        "Green": (0,150,0)
     }
 
     ## Images
     # Load flag icon and scaled to 80% of a tile
+    #* Change path to assets/flag.png when compiling
     flag_icon = pygame.transform.smoothscale(
         pygame.image.load(os.path.join(os.path.dirname(__file__), 'assets','flag.png')),
-        (int(tile_width  * 0.7), int(tile_height * 0.7))
-        )
+        (int(tile_width  * 0.7), int(tile_height * 0.7)))
+
 
     ## Fonts
     # Font Syntax: font name, size, bold, italic
@@ -73,6 +74,9 @@ def main():
 
     timer_font = pygame.font.SysFont("Verdana", int(tile_height / 2), False, False)
     
+    #* Currently pointless, may become useful if the font is changed however
+    # if this doesn't occur it needs to be removed and instances replaced
+    # with the dimentions of a single character
     for number in range(8):
         proximity_font_dimentions[str(number)] = proximity_font.size(str(number))
     
@@ -88,7 +92,6 @@ def main():
     window = setupWindow(window_width,window_height, topbar_thickness)
 
     grid = createGrid(columns, rows)
-    #//print(grid)
     
 
 
@@ -128,7 +131,7 @@ def main():
 
                             print("Unflag")
 
-                            grid = flag(grid, columns, rows, clicked_x, clicked_y)
+                            grid, flag_count = flag(grid, clicked_x, clicked_y, flag_count)
 
                             print(grid[f"{clicked_x},{clicked_y}"])
 
@@ -159,7 +162,7 @@ def main():
 
                             print("Flag")
 
-                            grid = flag(grid, columns, rows, clicked_x, clicked_y)
+                            grid, flag_count = flag(grid, clicked_x, clicked_y, flag_count)
 
                             print(grid[f"{clicked_x},{clicked_y}"])
 
@@ -221,7 +224,7 @@ def createGrid(columns, rows):
     
     return grid
 
-
+    
 
 def createMinefield(grid, columns, rows, mine_count, clicked_x, clicked_y):
 
@@ -322,25 +325,25 @@ def toggleTimer(timer_active):
     return timer_active, start_time
 
 
-def flag(grid, columns, rows, x, y):
+def flag(grid, x, y, flag_count):
 
     """Flag a mine"""
 
     if grid[f"{x},{y}"][3] == True:
         
         grid[f"{x},{y}"][3] = False
+        flag_count += 1
 
     elif grid[f"{x},{y}"][3] == False:
         
         grid[f"{x},{y}"][3] = True
+        flag_count -= 1
 
-    return grid
+    return grid, flag_count
 
-        
 
-        
-        
-        
+
+        #! Insane number of parameters, needs a code refactor (likely to be split into many small functions)
 
 def drawScreen(window, window_width, window_height,
                tile_width, tile_height,
@@ -361,9 +364,11 @@ def drawScreen(window, window_width, window_height,
 	(colours["Black"]),
 	(0, 0, window_width, topbar_thickness))
 
-    timer_font_render = timer_font.render(str(current_time // 1000), True, colours["White"])
+    # Converts the current_time into a minutes:seconds string format and then render
+    timer_text = f"{divmod(current_time // 1000, 60)[0]}:{divmod(current_time // 1000, 60)[1]}"
+    timer_font_render = timer_font.render(timer_text, True, colours["White"])
 
-    window.blit(timer_font_render, (400 ,topbar_thickness / 4))
+    window.blit(timer_font_render, (window_width / 2 ,topbar_thickness / 4))
 
     # Draw grid
     for x in range(columns):
@@ -395,7 +400,7 @@ def drawScreen(window, window_width, window_height,
                     
             
             # If not covered and not a mine, draw as so
-            elif grid[f"{x},{y}"][2] == False and grid[f"{x},{y}"][0] == False:
+            elif grid[f"{x},{y}"][2] == False and grid[f"{x},{y}"][0] == False and grid[f"{x},{y}"][1] != 0:
 
                 proximity_font_render = proximity_font.render(str(grid[f"{x},{y}"][1]), True, colours["White"])
                 
@@ -404,7 +409,7 @@ def drawScreen(window, window_width, window_height,
                 window.blit(proximity_font_render,
                 (x * tile_width + tile_width / 2 - int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2),
                  y * tile_height + tile_width / 2 + topbar_thickness / 2 + 
-                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
+                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 2)))
 
             # If not covered and is a mine, draw as so
             elif grid[f"{x},{y}"][2] == False and grid[f"{x},{y}"][0] == True:
@@ -416,7 +421,7 @@ def drawScreen(window, window_width, window_height,
                 window.blit(proximity_font_render,
                 (x * tile_width + tile_width / 2 - int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][0] / 2),
                  y * tile_height + tile_width / 2 + topbar_thickness / 2 + 
-                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 4)))
+                 int(proximity_font_dimentions[str(grid[f"{x},{y}"][1])][1] / 2)))
 
 
 
