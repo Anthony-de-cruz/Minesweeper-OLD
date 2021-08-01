@@ -1,50 +1,50 @@
-Minesweeper
+# Minesweeper
 
-To Do:
+A simple version of minesweeper built on [Python 3](https://www.python.org) + [Pygame](https://www.pygame.org)
 
-Fleshed out Flagging system:
+### To Do:
 
-    Fleshed out Flagging system:
+- Fleshed out Flagging system:
     
-        Tally total flags and compare to total mines
+  - Tally total flags and compare to total mines
     
-    Game end state:
+- Game end state:
     
-        Game over screen,
-        Game win screen
+  - Game over screen
+  - Game win screen
     
-    Game statistics:
+- Game statistics:
     
-        Time,
-        Number of mines remaining,
-        Total Flags,
-        Dimentions
+  - Time
+  - Number of mines remaining
+  - Total Flags
+  - Dimentions
     
-    Mine generation overhaul:
+- Mine generation overhaul:
     
-        Balance an actually good number of mines,
-        Make sure mines spawn in completable formations (such as 9 mines in a 3x3 space)
+  - Balance an actually good number of mines
+  - Make sure mines spawn in completable formations (such as 9 mines in a 3x3 space)
         
-    Difficulties:
+- Difficulties:
     
-        Mine densities ect
+  - Mine densities ect
         
-    Graphics overhaul:
+- Graphics overhaul:
 
-        Create animations for flagging and uncovering,
-        Create different colour themes
+  - Create animations for flagging and uncovering,
+  - Create different colour themes
     
-    Function improvement:
+- Function improvement:
     
-        Figure out how to lower function parameters and organisation, 13 parameters for drawScreen() ain't good
+  - Figure out how to lower function parameters and organisation, 13 parameters for drawScreen() ain't good
 
-Done:
+### Done:
         
-    Added an actual flag sprite,
-    Ensured playable area upon mine generation
-    Created main application setup,
-    Created inputs/outputs,
-    Created graphics,
-    Basic mine generation,
-    Basic flagging,
-    Basic uncovering
+- Added an actual flag sprite,
+- Ensured playable area upon mine generation
+- Created main application setup,
+- Created inputs/outputs,
+- Created graphics,
+- Basic mine generation,
+- Basic flagging,
+- Basic uncovering
