@@ -2,6 +2,9 @@
 
 A simple version of minesweeper built on [Python 3](https://www.python.org) + [Pygame](https://www.pygame.org)
 
+
+![alt text](https://github.com/Anthony-de-cruz/Minesweeper/blob/main/screenshot.png)
+
 ### To Do:
 
 - Fleshed out Flagging system:
