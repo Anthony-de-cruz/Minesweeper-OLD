@@ -122,28 +122,25 @@ def main():
 
                         initial_uncover = True
 
-                    # Check to see if it is in the grid
-                    if f"{clicked_x},{clicked_y}" in grid:
-
-                        print(f"{clicked_x},{clicked_y}")
-
-                        if grid[f"{clicked_x},{clicked_y}"][3]:
-
-                            print("Unflag")
-
-                            grid, flag_count = flag(grid, clicked_x, clicked_y, flag_count)
-
-                            print(grid[f"{clicked_x},{clicked_y}"])
 
 
-                        # Check to see if it is covered
-                        elif grid[f"{clicked_x},{clicked_y}"][2]:
+                    if grid[f"{clicked_x},{clicked_y}"][3]:
 
-                            print("Uncover")
+                        print("Unflag")
 
-                            uncover(grid, columns, rows, clicked_x, clicked_y)
-                            
-                    
+                        grid, flag_count = flag(grid, clicked_x, clicked_y, flag_count)
+
+                        print(grid[f"{clicked_x},{clicked_y}"])
+
+
+                    # Check to see if it is covered
+                    elif grid[f"{clicked_x},{clicked_y}"][2]:
+
+                        print("Uncover")
+
+                        uncover(grid, columns, rows, clicked_x, clicked_y)
+
+
                     else:
                         print("Not in grid")
                     
@@ -224,7 +221,6 @@ def createGrid(columns, rows):
     
     return grid
 
-    
 
 def createMinefield(grid, columns, rows, mine_count, clicked_x, clicked_y):
 
@@ -284,7 +280,6 @@ def createMinefield(grid, columns, rows, mine_count, clicked_x, clicked_y):
                               f"{random_y + rotation_list[rotation][1]}")][1] += 1
 
 
-
 def uncover(grid, columns, rows, x, y):
 
     """Recursive function to uncover an area when clicked"""
@@ -315,6 +310,7 @@ def uncover(grid, columns, rows, x, y):
                         x + rotation_list[rotation][0],
                         y + rotation_list[rotation][1])
 
+
 def toggleTimer(timer_active):
 
     """Toggle the timer and set start_time"""
@@ -344,6 +340,7 @@ def flag(grid, x, y, flag_count):
 
 
         #! Insane number of parameters, needs a code refactor (likely to be split into many small functions)
+
 
 def drawScreen(window, window_width, window_height,
                tile_width, tile_height,
