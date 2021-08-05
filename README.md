@@ -1,9 +1,12 @@
 # Minesweeper
+[Minesweeper.py](Minesweeper.py):<br/>
+ - A simple version of Minesweeper built on [Python 3](https://www.python.org) + [Pygame](https://www.pygame.org)
 
-A simple version of minesweeper built on [Python 3](https://www.python.org) + [Pygame](https://www.pygame.org)
+[Minesweeper Rewrite.py](Minesweeper-Rewrite.py):<br/>
+ - A simple version of Minesweeper built on [Python 3](https://www.python.org) + [Pygame](https://www.pygame.org) + [Pygame_Menu](https://github.com/ppizarror/pygame-menu)
 
 
-![alt text](https://github.com/Anthony-de-cruz/Minesweeper/blob/main/screenshot.png)
+![alt text](screenshot.png)
 
 ### To Do:
 
