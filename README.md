@@ -3,11 +3,11 @@
  - A simple version of Minesweeper built on [Python 3](https://www.python.org) + [Pygame](https://www.pygame.org)
 
 [Minesweeper Rewrite.py](Minesweeper-Rewrite.py):<br/>
- - A simple version of Minesweeper built on [Python 3](https://www.python.org) + [Pygame](https://www.pygame.org) + [Pygame_Menu](https://github.com/ppizarror/pygame-menu)
+ - A simple version of Minesweeper built on [Python 3](https://www.python.org) + [Pygame](https://www.pygame.org) + [Pygame_Menu](https://github.com/ppizarror/pygame-menu) that is a code overhaul of [Minesweeper.py](Minesweeper.py) including a new menu system.
 
 
 ![alt text](screenshot.png)
-
+## For old:
 ### To Do:
 
 - Fleshed out Flagging system:
