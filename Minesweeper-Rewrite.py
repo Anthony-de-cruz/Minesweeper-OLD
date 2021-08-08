@@ -114,6 +114,8 @@ class startMenu():
             print("Invalid entries")
             return False
             #todo Make sure this error is visible to the user
+            #todo Also alter acceptable parameters further to
+            #todo prevent more breaking
         
         else:
             self.menu.disable()
@@ -144,8 +146,9 @@ class minesweeper():
         self.window_width = self.field_width
         self.window_height = self.field_height + self.topbar_thickness
 
-        # Difficulty as selected in the start menu
+        # Difficulty as selected in the start menu and set the flag count accordingly
         self.difficulty = difficulty
+        self.flag_count = self.difficulty[1]
 
         # Colours constant dictionary
         self.COLOURS = COLOURS
@@ -156,6 +159,14 @@ class minesweeper():
 
         # Set uncovered bool for enacting mine generation
         self.uncovered = False
+
+        ## Images
+        # Load flag icon and scaled to 70% of a tile
+        #* Change path to assets/flag.png when compiling
+        flag_icon = pygame.transform.smoothscale(
+        pygame.image.load(os.path.join(os.path.dirname(__file__), 'assets','flag.png')),
+        (int(self.tile_width  * 0.7), int(self.tile_height * 0.7)))
+
 
         self.setupWindow()
         self.setupGrid()
@@ -173,7 +184,8 @@ class minesweeper():
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
         pygame.display.set_caption(("Minesweeper"))
         os.environ['SDL_VIDEO_CENTERED'] = '1'
-    
+
+
     def setupGrid(self):
 
         """Method to setup grid table"""
@@ -183,18 +195,20 @@ class minesweeper():
         for x in range(self.field_columns):
             for y in range(self.field_rows):
                 # Each tile will be it's own key containing a list 4 elements:
-                # (
+                # [
                 # Is mine (True/False),
                 # Mines in proximity(int),
                 # Status ("uncovered"/"covered"/"flagged")
-                # )
+                # ]
                 self.grid[f"{x},{y}"] = [False, 0, "covered"]
-    
+
+
     def generateMinefield(self):
 
         """Method to generate minefield"""
-        #todo do 
+        #todo
         pass
+
 
     def mouseInputs(self, mouse):
 
@@ -210,14 +224,24 @@ class minesweeper():
             # Identify which button is being pressed and act accordingly
             if mouse.button == 1:
                         print("Left Click")
-                        if clicked_x or clicked_y >= 0:
+
+                        if clicked_x >= 0 and clicked_y >= 0:
+
                             if self.grid[f"{clicked_x},{clicked_y}"][2] == "covered":
-                                print(self.grid[f"{clicked_x},{clicked_y}"][2])
+
                                 self.grid[f"{clicked_x},{clicked_y}"][2] = "uncovered"
-                            
+                                #todo Uncover
+                                print("  Uncovered")
+
                             elif self.grid[f"{clicked_x},{clicked_y}"][2] == "flagged":
 
                                 self.grid[f"{clicked_x},{clicked_y}"][2] = "covered"
+                                #todo Flag func
+                                print("  Unflagged")
+
+                            else: print("  Already uncovered")
+                        
+                        else: print("  Outside grid")
 
             elif mouse.button == 3:
                         print("Right Click")
@@ -232,10 +256,27 @@ class minesweeper():
                 f"  {self.mouse_position[0]}, {self.mouse_position[0]}\n" +
                 f"  {clicked_x}, {clicked_y}"
             )
-        
+
+
+    def uncover(self):
+
+        """Method to uncover an area recursively when clicked"""
+
+        #todo
+        pass
+
+
+    def flag(self):
+
+        """Method to control the flagging of tiles"""
+
+        #todo
+        pass
+
+
     def drawScreen(self):
 
-        """Draw the screen"""
+        """Method to draw the screen"""
 
         # Fill background
         self.window.fill(self.COLOURS["Black"])
@@ -258,6 +299,18 @@ class minesweeper():
                         y * self.tile_height + self.topbar_thickness,
                         self.tile_width,
                         self.tile_height
+                    ))
+                
+                elif self.grid[f"{x},{y}"][2] == "flagged":
+
+                    pygame.draw.rect(self.window,
+                    (self.COLOURS["Grey"]),
+                    (
+                        x * self.tile_width + int(self.tile_width * 0.1),
+                        y * self.tile_height + self.topbar_thickness +
+                        int(self.tile_height * 0.1),
+                        self.tile_width - int(self.tile_width * 0.2),
+                        self.tile_height - int(self.tile_height * 0.2)
                     ))
 
             #todo
