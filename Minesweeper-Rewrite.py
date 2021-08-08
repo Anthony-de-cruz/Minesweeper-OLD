@@ -211,14 +211,22 @@ class minesweeper():
 
         ## Fonts
         # Font Syntax: font name, size, bold, italic
-        # Render syntax: text, antialiasing, colour
 
         # Set the font size to be the smallest out of the tile width and height
         if self.tile_width <= self.tile_height: font_size = int(self.tile_width / 2)
         elif self.tile_width >= self.tile_height: font_size = int(self.tile_height / 2)
 
-        self.proximity_font = pygame.font.SysFont("Verdana", font_size, False, False)
+        self.tile_font = pygame.font.SysFont("Verdana", font_size, False, False)
         self.timer_font = pygame.font.SysFont("Verdana", font_size, False, False)
+        
+        # Render of the B, this is done here rather than in drawScreen() as this should
+        # be unchanging so it is a waste to re render it when drawing each time
+        # Render syntax: text, antialiasing, colour
+        self.tile_font_bomb_render = self.tile_font.render(
+                                                            "B", 
+                                                            True, 
+                                                            self.COLOURS["White"]
+                                                        )
 
 
     def generateMinefield(self, clicked_x, clicked_y):
@@ -374,6 +382,44 @@ class minesweeper():
                         self.tile_width - int(self.tile_width * 0.2),
                         self.tile_height - int(self.tile_height * 0.2)
                     ))
+                    #todo draw flag
+                
+                # If uncovered and not a mine and has a mine in proximity
+                elif (
+                        self.grid[f"{x},{y}"][2] == "uncovered" and 
+                        self.grid[f"{x},{y}"][0] == False and 
+                        self.grid[f"{x},{y}"][1] != 0
+                    ):
+
+                    tile_font_render = self.tile_font.render(
+                                                                        str(self.grid[f"{x},{y}"][1]), 
+                                                                        True, 
+                                                                        self.COLOURS["White"]
+                                                                    )
+                    # Draw number of mines in proximity
+                    self.window.blit(tile_font_render, (
+                        x * self.tile_width + self.tile_width / 2 - 
+                        int(self.tile_font.size(str(self.grid[f"{x},{y}"][1]))[0] / 2),
+                        y * self.tile_height + self.tile_width / 2 +
+                        int(self.tile_font.size(str(self.grid[f"{x},{y}"][1]))[1] / 2) +
+                        self.topbar_thickness / 2)
+                        )
+
+                # If uncovered and is a mine
+                elif (
+                        self.grid[f"{x},{y}"][2] == "uncovered" and 
+                        self.grid[f"{x},{y}"][0] == True
+                    ):
+
+                    self.window.blit(self.tile_font_bomb_render, (
+                        x * self.tile_width + self.tile_width / 2 - 
+                        int(self.tile_font.size(str(self.grid[f"{x},{y}"][1]))[0] / 2),
+                        y * self.tile_height + self.tile_width / 2 +
+                        int(self.tile_font.size(str(self.grid[f"{x},{y}"][1]))[1] / 2) +
+                        self.topbar_thickness / 2)
+                        )
+
+
 
             #todo
             pass
