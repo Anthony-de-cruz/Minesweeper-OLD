@@ -160,16 +160,10 @@ class minesweeper():
         # Set uncovered bool for enacting mine generation
         self.uncovered = False
 
-        ## Images
-        # Load flag icon and scaled to 70% of a tile
-        #* Change path to assets/flag.png when compiling
-        flag_icon = pygame.transform.smoothscale(
-        pygame.image.load(os.path.join(os.path.dirname(__file__), 'assets','flag.png')),
-        (int(self.tile_width  * 0.7), int(self.tile_height * 0.7)))
-
 
         self.setupWindow()
         self.setupGrid()
+        self.loadAssets()
 
 
 # ---------------------------------- Methods --------------------------------- #
@@ -201,6 +195,30 @@ class minesweeper():
                 # Status ("uncovered"/"covered"/"flagged")
                 # ]
                 self.grid[f"{x},{y}"] = [False, 0, "covered"]
+
+
+    def loadAssets(self):
+
+        """Method to load assets including images and fonts"""
+
+        ## Images
+        #* Change path to assets/flag.png when compiling
+
+        # Load flag icon and scaled to 70% of a tile
+        self.flag_icon = pygame.transform.smoothscale(
+        pygame.image.load(os.path.join(os.path.dirname(__file__), 'assets','flag.png')),
+        (int(self.tile_width  * 0.7), int(self.tile_height * 0.7)))
+
+        ## Fonts
+        # Font Syntax: font name, size, bold, italic
+        # Render syntax: text, antialiasing, colour
+
+        # Set the font size to be the smallest out of the tile width and height
+        if self.tile_width <= self.tile_height: font_size = int(self.tile_width / 2)
+        elif self.tile_width >= self.tile_height: font_size = int(self.tile_height / 2)
+
+        self.proximity_font = pygame.font.SysFont("Verdana", font_size, False, False)
+        self.timer_font = pygame.font.SysFont("Verdana", font_size, False, False)
 
 
     def generateMinefield(self, clicked_x, clicked_y):
@@ -238,6 +256,7 @@ class minesweeper():
 
                 mines_to_place -= 1
 
+                # Loop to update all surrounding tiles with new mines in proximity
                 for rotation in self.rotation_list:
                 
                     # Check that it isn't trying to access a non existant tile
