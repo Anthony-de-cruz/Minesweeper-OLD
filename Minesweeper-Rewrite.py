@@ -148,7 +148,7 @@ class minesweeper():
 
         # Difficulty as selected in the start menu and set the flag count accordingly
         self.difficulty = difficulty
-        self.flag_count = self.difficulty[1]
+        self.flag_count = difficulty[1]
 
         # Colours constant dictionary
         self.COLOURS = COLOURS
@@ -203,11 +203,54 @@ class minesweeper():
                 self.grid[f"{x},{y}"] = [False, 0, "covered"]
 
 
-    def generateMinefield(self):
+    def generateMinefield(self, clicked_x, clicked_y):
 
         """Method to generate minefield"""
-        #todo
-        pass
+        
+        mines_to_place = self.difficulty[1]
+        
+        while mines_to_place > 0:
+
+            random_x = random.randint(0, self.field_columns - 1)
+            random_y = random.randint(0, self.field_rows - 1)
+
+            # Check to see if the random coords are not where the user clicked or
+            # where a mine has already been placed
+            if (
+                    (random_x, random_y) != (clicked_x, clicked_y) and
+                    self.grid[f"{random_x},{random_y}"][0] != True
+            ):
+
+                # Check to see if the random coords are in proximity of where the
+                # user clicked, if so, don't place a mine there
+                in_proximity = False
+                for rotation in self.rotation_list:
+
+                    if (
+                        (random_x + rotation[0], random_y + rotation[0]) ==
+                        (clicked_x, clicked_y)
+                    ): in_proximity = True
+                
+                if in_proximity: continue
+
+                # Set a mine
+                self.grid[f"{random_x},{random_y}"][0] = True
+
+                mines_to_place -= 1
+
+                for rotation in self.rotation_list:
+                
+                    # Check that it isn't trying to access a non existant tile
+                    if (
+                            random_x + rotation[0] >= 0 
+                        and random_y + rotation[1] >= 0
+                        and random_x + rotation[0] <= self.field_columns - 1
+                        and random_y + rotation[1] <= self.field_rows -1
+                        ):
+
+                            # Increase mines in proximity
+                            self.grid[(f"{random_x + rotation[0]},"
+                                    f"{random_y + rotation[1]}")][1] += 1
 
 
     def mouseInputs(self, mouse):
@@ -249,7 +292,7 @@ class minesweeper():
 
         # Create a new mine field
         else:
-            self.generateMinefield()
+            self.generateMinefield(clicked_x, clicked_y)
             self.uncovered = True
 
         print(
