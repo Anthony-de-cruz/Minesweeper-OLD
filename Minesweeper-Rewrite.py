@@ -295,7 +295,7 @@ class minesweeper():
             if mouse.button == 1:
                         print("Left Click")
 
-                        if clicked_x >= 0 and clicked_y >= 0:
+                        if f"{clicked_x},{clicked_y}" in self.grid:
 
                             if self.grid[f"{clicked_x},{clicked_y}"][2] == "covered":
 
@@ -305,9 +305,7 @@ class minesweeper():
 
                             elif self.grid[f"{clicked_x},{clicked_y}"][2] == "flagged":
 
-                                self.grid[f"{clicked_x},{clicked_y}"][2] = "covered"
-                                #todo Flag func
-                                print("  Unflagged")
+                                print(self.flag(clicked_x, clicked_y))
 
                             else: print("  Already uncovered")
                         
@@ -315,7 +313,18 @@ class minesweeper():
 
             elif mouse.button == 3:
                         print("Right Click")
-                        #todo
+
+                        if f"{clicked_x},{clicked_y}" in self.grid:
+                            
+                            if (
+                                self.grid[f"{clicked_x},{clicked_y}"][2] == "covered" or
+                                self.grid[f"{clicked_x},{clicked_y}"][2] == "flagged"
+                            ):
+                                print(self.flag(clicked_x, clicked_y))
+
+
+                        else: print("  Outside grid")
+                        
 
         # Create a new mine field
         else:
@@ -336,12 +345,21 @@ class minesweeper():
         pass
 
 
-    def flag(self):
+    def flag(self, x, y):
 
         """Method to control the flagging of tiles"""
 
-        #todo
-        pass
+        if self.grid[f"{x},{y}"][2] == "covered":
+
+            self.grid[f"{x},{y}"][2] = "flagged"
+            self.flag_count += 1
+            return "  Flagged"
+
+        elif self.grid[f"{x},{y}"][2] == "flagged":
+
+            self.grid[f"{x},{y}"][2] = "covered"
+            self.flag_count -= 1
+            return "  Unflagged"
 
 
     def drawScreen(self):
@@ -411,6 +429,7 @@ class minesweeper():
                         self.grid[f"{x},{y}"][0] == True
                     ):
 
+                    # Draw bomb "B"
                     self.window.blit(self.tile_font_bomb_render, (
                         x * self.tile_width + self.tile_width / 2 - 
                         int(self.tile_font.size(str(self.grid[f"{x},{y}"][1]))[0] / 2),
