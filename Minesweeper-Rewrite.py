@@ -179,7 +179,6 @@ class minesweeper():
 
 # ---------------------------------- Methods --------------------------------- #
 
-
     def setupWindow(self):
         """Method to setup game window"""
 
@@ -410,10 +409,11 @@ class minesweeper():
                                      ))
 
                     self.window.blit(self.flag_icon,
-                        (x * self.tile_width + int(self.tile_width * 0.15), 
-                        y * self.tile_height + self.topbar_thickness + int(self.tile_height * 0.15), 
-                        self.tile_width, 
-                        self.tile_height))
+                                     (x * self.tile_width + int(self.tile_width * 0.15),
+                                      y * self.tile_height + self.topbar_thickness +
+                                      int(self.tile_height * 0.15),
+                                      self.tile_width,
+                                      self.tile_height))
 
                 # If uncovered and not a mine and has a mine in proximity
                 elif (
