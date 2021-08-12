@@ -220,7 +220,6 @@ class minesweeper():
 
         # Fonts
         # Font Syntax: font name, size, bold, italic
-
         # Set the font size to be the smallest out of the tile width and height
         if self.tile_width <= self.tile_height:
             font_size = int(self.tile_width / 2)
@@ -409,7 +408,12 @@ class minesweeper():
                                          self.tile_height -
                                          int(self.tile_height * 0.2)
                                      ))
-                    # todo draw flag
+
+                    self.window.blit(self.flag_icon,
+                        (x * self.tile_width + int(self.tile_width * 0.15), 
+                        y * self.tile_height + self.topbar_thickness + int(self.tile_height * 0.15), 
+                        self.tile_width, 
+                        self.tile_height))
 
                 # If uncovered and not a mine and has a mine in proximity
                 elif (
