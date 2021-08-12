@@ -1,9 +1,13 @@
-import os, random, sys
-import pygame, pygame_menu
+import os
+import random
+import sys
+import pygame
+import pygame_menu
 
 # ---------------------------------------------------------------------------- #
 #                               Start Menu Object                              #
 # ---------------------------------------------------------------------------- #
+
 
 class startMenu():
 
@@ -25,51 +29,51 @@ class startMenu():
         self.field_rows = 20
 
         # Set difficulty list and default difficulty
-        self.difficulty_list = [("Hard", 80),("Normal", 60),("Easy", 40)]
+        self.difficulty_list = [("Hard", 80), ("Normal", 60), ("Easy", 40)]
         self.difficulty = self.difficulty_list[1]
 
         # Create menu widgets
         self.menu = pygame_menu.Menu(
-                                        width = 700,
-                                        height = 500,
-                                        title = "Minesweeper",
-                                        theme = pygame_menu.themes.THEME_DARK
-                                    )
+            width=700,
+            height=500,
+            title="Minesweeper",
+            theme=pygame_menu.themes.THEME_DARK
+        )
 
         self.menu.add.text_input(
-                                    "Field Width: ",
-                                    default = "800",
-                                    maxchar = 4,
-                                    valid_chars = self.int_chars,
-                                    onchange = self.setFieldWidth
-                                )
+            "Field Width: ",
+            default="800",
+            maxchar=4,
+            valid_chars=self.int_chars,
+            onchange=self.setFieldWidth
+        )
         self.menu.add.text_input(
-                                    "Field Height: ",
-                                    default = "800",
-                                    maxchar = 4,
-                                    valid_chars = self.int_chars,
-                                    onchange = self.setFieldHeight
-                                )
+            "Field Height: ",
+            default="800",
+            maxchar=4,
+            valid_chars=self.int_chars,
+            onchange=self.setFieldHeight
+        )
         self.menu.add.text_input(
-                                    "Field Columns: ",
-                                    default = "20",
-                                    maxchar = 2,
-                                    valid_chars = self.int_chars,
-                                    onchange = self.setFieldColumns
-                                )
+            "Field Columns: ",
+            default="20",
+            maxchar=2,
+            valid_chars=self.int_chars,
+            onchange=self.setFieldColumns
+        )
         self.menu.add.text_input(
-                                    "Field Rows: ",
-                                    default = "20",
-                                    maxchar = 2,
-                                    valid_chars = self.int_chars,
-                                    onchange = self.setFieldRows
-                                )
+            "Field Rows: ",
+            default="20",
+            maxchar=2,
+            valid_chars=self.int_chars,
+            onchange=self.setFieldRows
+        )
 
         self.menu.add.selector(
-                                "Difficulty: ",
-                                self.difficulty_list,
-                                onchange = self.setDifficulty,
-                            )
+            "Difficulty: ",
+            self.difficulty_list,
+            onchange=self.setDifficulty,
+        )
 
         self.menu.add.button('Play', self.startGame)
         self.menu.add.button('Quit', pygame_menu.events.EXIT)
@@ -78,20 +82,28 @@ class startMenu():
 
     # Text entry and selector value functions
     def setFieldWidth(self, value):
-        if value != "": self.field_width = int(value)
-        else: self.field_width = 0
+        if value != "":
+            self.field_width = int(value)
+        else:
+            self.field_width = 0
 
     def setFieldHeight(self, value):
-        if value != "": self.field_height = int(value)
-        else: self.field_height = 0
+        if value != "":
+            self.field_height = int(value)
+        else:
+            self.field_height = 0
 
     def setFieldColumns(self, value):
-        if value != "": self.field_columns = int(value)
-        else: self.field_columns = 0
+        if value != "":
+            self.field_columns = int(value)
+        else:
+            self.field_columns = 0
 
     def setFieldRows(self, value):
-        if value != "": self.field_rows = int(value)
-        else: self.field_rows = 0
+        if value != "":
+            self.field_rows = int(value)
+        else:
+            self.field_rows = 0
 
     def setDifficulty(self, difficulty, _):
         self.difficulty = difficulty[1]
@@ -99,24 +111,23 @@ class startMenu():
 # ---------------------------------- Methods --------------------------------- #
 
     def startGame(self):
-
         """Method to begin the game"""
 
         print("Less gooo")
 
         if (
-                self.field_width < self.field_columns or
-                self.field_height < self.field_width or
-                self.field_columns <= 0 or
-                self.field_rows <= 0
-            ):
-            
+            self.field_width < self.field_columns or
+            self.field_height < self.field_width or
+            self.field_columns <= 0 or
+            self.field_rows <= 0
+        ):
+
             print("Invalid entries")
             return False
-            #todo Make sure this error is visible to the user
-            #todo Also alter acceptable parameters further to
-            #todo prevent more breaking
-        
+            # todo Make sure this error is visible to the user
+            # todo Also alter acceptable parameters further to
+            # todo prevent more breaking
+
         else:
             self.menu.disable()
             return True
@@ -155,11 +166,11 @@ class minesweeper():
 
         # List for the different coordinate offsets for an 8 pointed turn around a point
         # I'm not really sure if that's a great way of doing it but it works for now
-        self.rotation_list = [(-1, -1),(0, -1),(1, -1),(1, 0),(1, 1),(0, 1),(-1, 1),(-1, 0)]
+        self.rotation_list = [(-1, -1), (0, -1), (1, -1),
+                              (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0)]
 
         # Set uncovered bool for enacting mine generation
         self.uncovered = False
-
 
         self.setupWindow()
         self.setupGrid()
@@ -168,20 +179,19 @@ class minesweeper():
 
 # ---------------------------------- Methods --------------------------------- #
 
-    def setupWindow(self):
 
+    def setupWindow(self):
         """Method to setup game window"""
 
         self.field_width
         self.field_height
 
-        self.window = pygame.display.set_mode((self.window_width, self.window_height))
+        self.window = pygame.display.set_mode(
+            (self.window_width, self.window_height))
         pygame.display.set_caption(("Minesweeper"))
         os.environ['SDL_VIDEO_CENTERED'] = '1'
 
-
     def setupGrid(self):
-
         """Method to setup grid table"""
 
         self.grid = {}
@@ -196,45 +206,46 @@ class minesweeper():
                 # ]
                 self.grid[f"{x},{y}"] = [False, 0, "covered"]
 
-
     def loadAssets(self):
-
         """Method to load assets including images and fonts"""
 
-        ## Images
-        #* Change path to assets/flag.png when compiling
+        # Images
+        # * Change path to assets/flag.png when compiling
 
         # Load flag icon and scaled to 70% of a tile
         self.flag_icon = pygame.transform.smoothscale(
-        pygame.image.load(os.path.join(os.path.dirname(__file__), 'assets','flag.png')),
-        (int(self.tile_width  * 0.7), int(self.tile_height * 0.7)))
+            pygame.image.load(os.path.join(
+                os.path.dirname(__file__), 'assets', 'flag.png')),
+            (int(self.tile_width * 0.7), int(self.tile_height * 0.7)))
 
-        ## Fonts
+        # Fonts
         # Font Syntax: font name, size, bold, italic
 
         # Set the font size to be the smallest out of the tile width and height
-        if self.tile_width <= self.tile_height: font_size = int(self.tile_width / 2)
-        elif self.tile_width >= self.tile_height: font_size = int(self.tile_height / 2)
+        if self.tile_width <= self.tile_height:
+            font_size = int(self.tile_width / 2)
+        elif self.tile_width >= self.tile_height:
+            font_size = int(self.tile_height / 2)
 
-        self.tile_font = pygame.font.SysFont("Verdana", font_size, False, False)
-        self.timer_font = pygame.font.SysFont("Verdana", font_size, False, False)
-        
+        self.tile_font = pygame.font.SysFont(
+            "Verdana", font_size, False, False)
+        self.timer_font = pygame.font.SysFont(
+            "Verdana", font_size, False, False)
+
         # Render of the B, this is done here rather than in drawScreen() as this should
         # be unchanging so it is a waste to re render it when drawing each time
         # Render syntax: text, antialiasing, colour
         self.tile_font_bomb_render = self.tile_font.render(
-                                                            "B", 
-                                                            True, 
-                                                            self.COLOURS["White"]
-                                                        )
-
+            "B",
+            True,
+            self.COLOURS["White"]
+        )
 
     def generateMinefield(self, clicked_x, clicked_y):
-
         """Method to generate minefield"""
-        
+
         mines_to_place = self.difficulty[1]
-        
+
         while mines_to_place > 0:
 
             random_x = random.randint(0, self.field_columns - 1)
@@ -253,11 +264,13 @@ class minesweeper():
                 for rotation in self.rotation_list:
 
                     if (
-                        (random_x + rotation[0], random_y + rotation[0]) ==
+                        (random_x + rotation[0], random_y + rotation[1]) ==
                         (clicked_x, clicked_y)
-                    ): in_proximity = True
-                
-                if in_proximity: continue
+                    ):
+                        in_proximity = True
+
+                if in_proximity:
+                    continue
 
                 # Set a mine
                 self.grid[f"{random_x},{random_y}"][0] = True
@@ -266,22 +279,20 @@ class minesweeper():
 
                 # Loop to update all surrounding tiles with new mines in proximity
                 for rotation in self.rotation_list:
-                
+
                     # Check that it isn't trying to access a non existant tile
                     if (
-                            random_x + rotation[0] >= 0 
-                        and random_y + rotation[1] >= 0
-                        and random_x + rotation[0] <= self.field_columns - 1
-                        and random_y + rotation[1] <= self.field_rows -1
-                        ):
+                        random_x + rotation[0] >= 0
+                            and random_y + rotation[1] >= 0
+                            and random_x + rotation[0] <= self.field_columns - 1
+                            and random_y + rotation[1] <= self.field_rows - 1
+                    ):
 
-                            # Increase mines in proximity
-                            self.grid[(f"{random_x + rotation[0]},"
-                                    f"{random_y + rotation[1]}")][1] += 1
-
+                        # Increase mines in proximity
+                        self.grid[(f"{random_x + rotation[0]},"
+                                   f"{random_y + rotation[1]}")][1] += 1
 
     def mouseInputs(self, mouse):
-
         """Method to handle mouse inputs"""
 
         self.mouse_position = pygame.mouse.get_pos()
@@ -293,38 +304,39 @@ class minesweeper():
         if self.uncovered:
             # Identify which button is being pressed and act accordingly
             if mouse.button == 1:
-                        print("Left Click")
+                print("Left Click")
 
-                        if f"{clicked_x},{clicked_y}" in self.grid:
+                if f"{clicked_x},{clicked_y}" in self.grid:
 
-                            if self.grid[f"{clicked_x},{clicked_y}"][2] == "covered":
+                    if self.grid[f"{clicked_x},{clicked_y}"][2] == "covered":
 
-                                self.grid[f"{clicked_x},{clicked_y}"][2] = "uncovered"
-                                #todo Uncover
-                                print("  Uncovered")
+                        self.grid[f"{clicked_x},{clicked_y}"][2] = "uncovered"
+                        # todo Uncover
+                        print("  Uncovered")
 
-                            elif self.grid[f"{clicked_x},{clicked_y}"][2] == "flagged":
+                    elif self.grid[f"{clicked_x},{clicked_y}"][2] == "flagged":
 
-                                print(self.flag(clicked_x, clicked_y))
+                        print("  " + self.flag(clicked_x, clicked_y))
 
-                            else: print("  Already uncovered")
-                        
-                        else: print("  Outside grid")
+                    else:
+                        print("  Already uncovered")
+
+                else:
+                    print("  Outside grid")
 
             elif mouse.button == 3:
-                        print("Right Click")
+                print("Right Click")
 
-                        if f"{clicked_x},{clicked_y}" in self.grid:
-                            
-                            if (
-                                self.grid[f"{clicked_x},{clicked_y}"][2] == "covered" or
-                                self.grid[f"{clicked_x},{clicked_y}"][2] == "flagged"
-                            ):
-                                print(self.flag(clicked_x, clicked_y))
+                if f"{clicked_x},{clicked_y}" in self.grid:
 
+                    if (
+                        self.grid[f"{clicked_x},{clicked_y}"][2] == "covered" or
+                        self.grid[f"{clicked_x},{clicked_y}"][2] == "flagged"
+                    ):
+                        print("  " + self.flag(clicked_x, clicked_y))
 
-                        else: print("  Outside grid")
-                        
+                else:
+                    print("  Outside grid")
 
         # Create a new mine field
         else:
@@ -332,38 +344,32 @@ class minesweeper():
             self.uncovered = True
 
         print(
-                f"  {self.mouse_position[0]}, {self.mouse_position[0]}\n" +
-                f"  {clicked_x}, {clicked_y}"
-            )
-
+            f"  {self.mouse_position[0]}, {self.mouse_position[0]}\n" +
+            f"  {clicked_x}, {clicked_y}"
+        )
 
     def uncover(self):
-
         """Method to uncover an area recursively when clicked"""
 
-        #todo
+        # todo
         pass
 
-
     def flag(self, x, y):
-
         """Method to control the flagging of tiles"""
 
         if self.grid[f"{x},{y}"][2] == "covered":
 
             self.grid[f"{x},{y}"][2] = "flagged"
             self.flag_count += 1
-            return "  Flagged"
+            return "Flagged"
 
         elif self.grid[f"{x},{y}"][2] == "flagged":
 
             self.grid[f"{x},{y}"][2] = "covered"
             self.flag_count -= 1
-            return "  Unflagged"
-
+            return "Unflagged"
 
     def drawScreen(self):
-
         """Method to draw the screen"""
 
         # Fill background
@@ -371,8 +377,8 @@ class minesweeper():
 
         # Stats Bar
         pygame.draw.rect(self.window,
-        (self.COLOURS["Black"]),
-        (0, 0, self.window_width, self.topbar_thickness))
+                         (self.COLOURS["Black"]),
+                         (0, 0, self.window_width, self.topbar_thickness))
 
         # Draw Grid
         for x in range(self.field_columns):
@@ -381,118 +387,121 @@ class minesweeper():
                 if self.grid[f"{x},{y}"][2] == "covered":
 
                     pygame.draw.rect(self.window,
-                    (self.COLOURS["Green"]),
-                    (
-                        x * self.tile_width,
-                        y * self.tile_height + self.topbar_thickness,
-                        self.tile_width,
-                        self.tile_height
-                    ))
-                
+                                     (self.COLOURS["Green"]),
+                                     (
+                                         x * self.tile_width,
+                                         y * self.tile_height + self.topbar_thickness,
+                                         self.tile_width,
+                                         self.tile_height
+                                     ))
+
                 elif self.grid[f"{x},{y}"][2] == "flagged":
 
                     pygame.draw.rect(self.window,
-                    (self.COLOURS["Grey"]),
-                    (
-                        x * self.tile_width + int(self.tile_width * 0.1),
-                        y * self.tile_height + self.topbar_thickness +
-                        int(self.tile_height * 0.1),
-                        self.tile_width - int(self.tile_width * 0.2),
-                        self.tile_height - int(self.tile_height * 0.2)
-                    ))
-                    #todo draw flag
-                
+                                     (self.COLOURS["Grey"]),
+                                     (
+                                         x * self.tile_width +
+                                         int(self.tile_width * 0.1),
+                                         y * self.tile_height + self.topbar_thickness +
+                                         int(self.tile_height * 0.1),
+                                         self.tile_width -
+                                         int(self.tile_width * 0.2),
+                                         self.tile_height -
+                                         int(self.tile_height * 0.2)
+                                     ))
+                    # todo draw flag
+
                 # If uncovered and not a mine and has a mine in proximity
                 elif (
-                        self.grid[f"{x},{y}"][2] == "uncovered" and 
-                        self.grid[f"{x},{y}"][0] == False and 
-                        self.grid[f"{x},{y}"][1] != 0
-                    ):
+                    self.grid[f"{x},{y}"][2] == "uncovered" and
+                    self.grid[f"{x},{y}"][0] == False and
+                    self.grid[f"{x},{y}"][1] != 0
+                ):
 
                     tile_font_render = self.tile_font.render(
-                                                                        str(self.grid[f"{x},{y}"][1]), 
-                                                                        True, 
-                                                                        self.COLOURS["White"]
-                                                                    )
+                        str(self.grid[f"{x},{y}"][1]),
+                        True,
+                        self.COLOURS["White"]
+                    )
                     # Draw number of mines in proximity
                     self.window.blit(tile_font_render, (
-                        x * self.tile_width + self.tile_width / 2 - 
-                        int(self.tile_font.size(str(self.grid[f"{x},{y}"][1]))[0] / 2),
+                        x * self.tile_width + self.tile_width / 2 -
+                        int(self.tile_font.size(
+                            str(self.grid[f"{x},{y}"][1]))[0] / 2),
                         y * self.tile_height + self.tile_width / 2 +
                         int(self.tile_font.size(str(self.grid[f"{x},{y}"][1]))[1] / 2) +
                         self.topbar_thickness / 2)
-                        )
+                    )
 
                 # If uncovered and is a mine
                 elif (
-                        self.grid[f"{x},{y}"][2] == "uncovered" and 
-                        self.grid[f"{x},{y}"][0] == True
-                    ):
+                    self.grid[f"{x},{y}"][2] == "uncovered" and
+                    self.grid[f"{x},{y}"][0] == True
+                ):
 
                     # Draw bomb "B"
                     self.window.blit(self.tile_font_bomb_render, (
-                        x * self.tile_width + self.tile_width / 2 - 
-                        int(self.tile_font.size(str(self.grid[f"{x},{y}"][1]))[0] / 2),
+                        x * self.tile_width + self.tile_width / 2 -
+                        int(self.tile_font.size(
+                            str(self.grid[f"{x},{y}"][1]))[0] / 2),
                         y * self.tile_height + self.tile_width / 2 +
                         int(self.tile_font.size(str(self.grid[f"{x},{y}"][1]))[1] / 2) +
                         self.topbar_thickness / 2)
-                        )
+                    )
 
-
-
-            #todo
+            # todo
             pass
 
 # ---------------------------------------------------------------------------- #
 #                                     Main                                     #
 # ---------------------------------------------------------------------------- #
 
+
 def main():
 
     pygame.init()
 
-    int_chars = [0,1,2,3,4,5,6,7,8,9]
+    int_chars = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     start_menu = startMenu(int_chars)
     start_menu_enabled = True
 
     COLOURS = {
-        "Black": (20,20,20),
-        "White": (255,255,255),
-        "Grey":  (60,60,60),
-        "Green": (0,150,0)
+        "Black": (20, 20, 20),
+        "White": (255, 255, 255),
+        "Grey":  (60, 60, 60),
+        "Green": (0, 150, 0)
     }
 
 # --------------------------------- Main Loop -------------------------------- #
 
-    ## Main loop
+    # Main loop
     while True:
 
-        ## Toggle Start menu
+        # Toggle Start menu
         while start_menu_enabled:
-            
+
             # Returns true or false depending on whether or not
             # the user entries are valid
             if start_menu.menu.mainloop(start_menu.window):
-            
+
                 print(
-                        f"{start_menu.field_width},{start_menu.field_height}\n"
-                        + f"{start_menu.field_columns},{start_menu.field_rows}\n"
-                        + f"{start_menu.difficulty}"
+                    f"{start_menu.field_width},{start_menu.field_height}\n"
+                    + f"{start_menu.field_columns},{start_menu.field_rows}\n"
+                    + f"{start_menu.difficulty}"
                 )
 
                 game = minesweeper(
-                                    start_menu.field_width,
-                                    start_menu.field_height,
-                                    start_menu.field_columns,
-                                    start_menu.field_rows,
-                                    start_menu.difficulty,
-                                    COLOURS
-                                )
+                    start_menu.field_width,
+                    start_menu.field_height,
+                    start_menu.field_columns,
+                    start_menu.field_rows,
+                    start_menu.difficulty,
+                    COLOURS
+                )
 
                 start_menu_enabled = False
 
-
-        ## Event Handler
+        # Event Handler
         for event in pygame.event.get():
 
             if event.type == pygame.KEYDOWN:
@@ -500,23 +509,19 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     print("ESC")
                     # to activate in game menu which is to be made
-            
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
 
                 game.mouseInputs(event)
-
 
             elif event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-
         game.drawScreen()
 
         # Update Screen
         pygame.display.flip()
-
-
 
 
 if __name__ == "__main__":
