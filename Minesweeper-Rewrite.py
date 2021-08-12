@@ -307,9 +307,7 @@ class minesweeper():
                 if f"{clicked_x},{clicked_y}" in self.grid:
 
                     if self.grid[f"{clicked_x},{clicked_y}"][2] == "covered":
-
-                        self.grid[f"{clicked_x},{clicked_y}"][2] = "uncovered"
-                        # todo Uncover
+                        self.uncover(clicked_x, clicked_y)
                         print("  Uncovered")
 
                     elif self.grid[f"{clicked_x},{clicked_y}"][2] == "flagged":
@@ -340,17 +338,30 @@ class minesweeper():
         else:
             self.generateMinefield(clicked_x, clicked_y)
             self.uncovered = True
+            self.uncover(clicked_x, clicked_y)
 
         print(
             f"  {self.mouse_position[0]}, {self.mouse_position[0]}\n" +
             f"  {clicked_x}, {clicked_y}"
         )
 
-    def uncover(self):
+    def uncover(self, x, y):
         """Method to uncover an area recursively when clicked"""
 
-        # todo
-        pass
+        if self.grid[f"{x},{y}"][2] == "covered":
+            self.grid[f"{x},{y}"][2] = "uncovered"
+
+            # If not a mine or in proximity of a mine
+            if self.grid[f"{x},{y}"][1] == 0 and self.grid[f"{x},{y}"][0] == False:
+
+                for rotation in self.rotation_list:
+
+                    if (
+                        x + rotation[0] >= 0
+                            and y + rotation[1] >= 0
+                            and x + rotation[0] <= self.field_columns - 1
+                            and y + rotation[1] <= self.field_rows - 1
+                    ): self.uncover(x + rotation[0], y + rotation[1])
 
     def flag(self, x, y):
         """Method to control the flagging of tiles"""
