@@ -169,8 +169,11 @@ class minesweeper():
         self.rotation_list = [(-1, -1), (0, -1), (1, -1),
                               (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0)]
 
-        # Set uncovered bool for enacting mine generation
+        # Set uncovered bool for enacting mine generation and timer_active bool for
+        # toggling the timer
         self.uncovered = False
+        self.timer_active = False
+        self.current_time = int()
 
         self.setupWindow()
         self.setupGrid()
@@ -337,6 +340,7 @@ class minesweeper():
         # Create a new mine field
         else:
             self.generateMinefield(clicked_x, clicked_y)
+            self.toggleTimer()
             self.uncovered = True
             self.uncover(clicked_x, clicked_y)
 
@@ -363,6 +367,12 @@ class minesweeper():
                             and y + rotation[1] <= self.field_rows - 1
                     ): self.uncover(x + rotation[0], y + rotation[1])
 
+    def toggleTimer(self):
+        """Method to toggle timer and set start time"""
+        if not self.uncovered:
+            self.start_time = pygame.time.get_ticks()
+        self.timer_active = not self.timer_active
+
     def flag(self, x, y):
         """Method to control the flagging of tiles"""
 
@@ -388,6 +398,11 @@ class minesweeper():
         pygame.draw.rect(self.window,
                          (self.COLOURS["Black"]),
                          (0, 0, self.window_width, self.topbar_thickness))
+
+        timer_text = f"{divmod(self.current_time // 1000, 60)[0]}:{divmod(self.current_time // 1000, 60)[1]}"
+        timer_font_render = self.timer_font.render(timer_text, True, self.COLOURS["White"])
+
+        self.window.blit(timer_font_render, (self.window_width / 2 ,self.topbar_thickness / 4))
 
         # Draw Grid
         for x in range(self.field_columns):
@@ -532,6 +547,9 @@ def main():
             elif event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+        
+        if game.timer_active:
+            game.current_time = pygame.time.get_ticks() - game.start_time
 
         game.drawScreen()
 
