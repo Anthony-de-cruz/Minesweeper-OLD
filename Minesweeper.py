@@ -30,7 +30,7 @@ class startMenu():
 
         # Set difficulty list and default difficulty
         self.difficulty_list = [("Hard", 80), ("Normal", 60), ("Easy", 40)]
-        self.difficulty = self.difficulty_list[1]
+        self.difficulty = self.difficulty_list[0]
 
         # Create menu widgets
         self.menu = pygame_menu.Menu(
@@ -106,7 +106,8 @@ class startMenu():
             self.field_rows = 0
 
     def setDifficulty(self, difficulty, _):
-        self.difficulty = difficulty[1]
+        self.difficulty = difficulty[0]
+        print(self.difficulty)
 
 # ---------------------------------- Methods --------------------------------- #
 
